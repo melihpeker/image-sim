@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image Similartiy API</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #000;
+        font-size: 32px;
+        margin-top: 40px;
+        margin-bottom: 30px;
+      }
+
+      form {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      label {
+        color: #000;
+        font-size: 18px;
+      }
+
+      input[type="file"] {
+        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #000;
+        background-color: #fff;
+        color: #000;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button[type="submit"] {
+        padding: 10px 20px;
+        background-color: rgb(237, 113, 56);
+        color: #fff;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      #result-container {
+        text-align: center;
+        margin-top: 30px;
+        position: relative;
+      }
+
+      #result img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 20px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .loader {
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid rgb(237, 113, 56);
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        animation: spin 2s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        display: none;
+      }
+
+      .description {
+        color: #666;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Image Similarity API</h1>
+    <form id="upload-form">
+      <label for="image-upload">Choose a PNG image:</label>
+      <br>
+      <input type="file" id="image-upload" accept="image/png">
+      <br>
+      <br>
+      <button type="submit" id="upload-button" disabled>Upload and Process</button>
+    </form>
+    <br>
+    <div id="result-container">
+      <div class="loader" id="loader"></div>
+      <div id="result"></div>
+    </div>
+
+    <script>
+            var uploadButton = document.getElementById("upload-button");
+      var fileInput = document.getElementById("image-upload");
+
+      fileInput.addEventListener("change", function() {
+        if (fileInput.files.length > 0 && fileInput.files[0].type === "image/png") {
+          uploadButton.disabled = false;
+        } else {
+          uploadButton.disabled = true;
+        }
+      });
+
+      document.getElementById("upload-form").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        if (uploadButton.disabled) {
+          return; // Prevent form submission if the button is disabled
+        }
+
+        // Show the loader
+        document.getElementById("loader").style.display = "block";
+
+        var formData = new FormData();
+        var fileInput = document.getElementById("image-upload");
+        var file = fileInput.files[0];
+        formData.append("image", file);
+        
+
+        fetch("http://localhost:8888/find-similar", {
+          method: "POST",
+          body: formData
+        })
+          .then(response => response.blob())
+          .then(data => {
+            // Hide the loader
+            document.getElementById("loader").style.display = "none";
+
+            var imageUrl = URL.createObjectURL(data);
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "<h2>Processed Image</h2>";
+            resultDiv.innerHTML += '<img src="' + imageUrl + '" alt="Processed Image">';
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+      });
+    </script>
+  </body>
+</html>
