@@ -18,7 +18,7 @@ To test the service easily, created an API which is running on a server and crea
 ![alt text](examples/image9.png)
 
 ## Timings
-Finding the most similar 10 images among 40000 images takes **~0.5 seconds** using an M1 Macbook with 8GB of memory. The process of downloading similar images, cropping and patching takes **around 2-3 seconds.** Therefore, total API call should take around 5-10 seconds (depending on connection speed as well).
+Finding the most similar 10 images among 40000 images takes **~0.5 seconds**.The process of downloading similar images, cropping and patching takes **around 2-3 seconds.** Therefore, total API call should take around 5-10 seconds (depending on connection speed as well).
 
 ## Running in Local
 - Install requirements using the requirements.txt file. 
