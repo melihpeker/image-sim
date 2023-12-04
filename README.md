@@ -6,8 +6,6 @@ Image similarity finder is a service that finds similar images to given image by
 
 To test the service easily, created an API which is running on a server and created a simple web page that calls this API as well. 
 
-**You can test this service from [here.](http://13.68.155.12/)**
-
 ## Examples
 
 ![alt text](examples/image1.png)
